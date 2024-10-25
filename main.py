@@ -4,6 +4,7 @@ class Point():
     def __init__(self, x : float, y: float):
         self.x = x
         self.y = y
+        
 
 class Line():
     def __init__(self, p1: Point, p2 :Point):
@@ -12,6 +13,7 @@ class Line():
     
     def draw(self, canvas: Canvas, color = "black"):
         canvas.create_line(self.p1.x, self.p1.y, self.p2.x, self.p2.y, fill=color, width=2)
+        
 
         
 class Window():
@@ -50,7 +52,8 @@ class Cell():
         top: bool,
         bot: bool, 
         point: Point, 
-        win: Window
+        win: Window,
+        size = 20.0
         ):
 
         self.left_wall = left
@@ -60,17 +63,20 @@ class Cell():
 
         self.pos = point
         self.win = win
-
-    def draw(self, size = 20):
+        self.size = size
+    def get_mid(self):
         
+        return(Point((self.pos.x +self.pos.x + self.size)/2, (self.pos.y + self.pos.y+self.size)/2))
+
+    def draw(self):
         
         x = self.pos.x
         y = self.pos.y
 
-        top_line = Line(self.pos, Point(x + size, y))
-        bot_line = Line(Point(x , y+size), Point(x + size, y+size))
-        left_line = Line(self.pos, Point(x , y + size))
-        right_line = Line(Point(x+size , y), Point(x + size, y+size))
+        top_line = Line(self.pos, Point(x + self.size, y))
+        bot_line = Line(Point(x , y+self.size), Point(x + self.size, y+ self.size))
+        left_line = Line(self.pos, Point(x , y + self.size))
+        right_line = Line(Point(x+self.size , y), Point(x +self.size, y+self.size))
         
         if self.top_wall:
             top_line.draw(self.win.canvas)
@@ -82,6 +88,21 @@ class Cell():
             right_line.draw(self.win.canvas)
 
 
+    def draw_move(self, to_cell, undo=False):
+        
+        cell_frm = self
+        cell_to = to_cell
+        col = "red"
+        
+        if undo:
+            cell_frm = self
+            cell_to = to_cell
+            col = "gray"
+
+        connect_line = Line(cell_frm.get_mid(), cell_to.get_mid())
+        connect_line.draw(self.win.canvas, col)        
+            
+        
 
 def main():
     window = Window(500,500,"test")
@@ -90,8 +111,12 @@ def main():
     #window.draw_line(line1)
 
     test_cell = Cell(True,True,True,True,Point(100,300),window)
+    test_cell2 = Cell(True,True,True,True,Point(200,300),window)
 
-    test_cell.draw(100)
+    test_cell.draw()
+    test_cell2.draw()
+    
+    test_cell.draw_move(test_cell2 )
     
     window.wait_for_close()
     print("hello")
