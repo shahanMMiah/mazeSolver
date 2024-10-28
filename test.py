@@ -6,10 +6,10 @@ from window import Window
 
 class Tests(unittest.TestCase):
     def test_maze_create_cells(self):
-        window = Window(120, 100, "cells test")
+        window = Window(600, 500, "cells test")
         num_cols = 12
         num_rows = 10
-        m1 = Maze(1, 1, num_rows, num_cols, 10, 10, window)
+        m1 = Maze(1, 1, num_rows, num_cols, 50, 50, window)
         self.assertEqual(
             len(m1._cells),
             num_cols,

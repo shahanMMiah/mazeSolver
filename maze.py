@@ -85,15 +85,20 @@ class Cell:
             Point(x + self._size_x, y + self._size_y),
             self._line_width,
         )
+        
+        walls = [self.top_wall,self.bot_wall,self.left_wall,self.right_wall]
+        col = "black"
+        for num, line in enumerate([top_line,bot_line,left_line,right_line]):
 
-        if self.top_wall:
-            top_line.draw(self._win.get_canvas())
-        if self.bot_wall:
-            bot_line.draw(self._win.get_canvas())
-        if self.left_wall:
-            left_line.draw(self._win.get_canvas())
-        if self.right_wall:
-            right_line.draw(self._win.get_canvas())
+            
+            if walls[num]:
+                col = "black"
+            else:
+                col = "#d9d9d9"
+        
+            line.draw(self._win.get_canvas(), col)
+        
+   
 
     def draw_move(self, to_cell, undo=False):
 
@@ -133,6 +138,7 @@ class Maze:
 
         self._cells = []
         self._create_cells()
+        self._break_entrance_and_exit()
 
     def _create_cells(self):
         x_pos = self._x1
@@ -164,3 +170,13 @@ class Maze:
     def _animate(self):
         self._win.redraw()
         self._win.get_canvas().after(self._aniamtion_speed)
+
+    def _break_entrance_and_exit(self):
+
+        self._cells[0][0].left_wall = False
+        self._cells[0][0].draw()
+        self._cells[-1][-1].right_wall = False
+        self._cells[-1][-1].draw()
+
+
+
