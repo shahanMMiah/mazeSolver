@@ -1,5 +1,6 @@
 from window import Window
 from tkinter import Canvas
+import random
 
 class Point:
     def __init__(self, x: float, y: float):
@@ -48,6 +49,7 @@ class Cell:
         size_x=20.0,
         size_y=20.0,
         line_wdith=2,
+        visited = False
     ):
 
         self.left_wall = left
@@ -60,6 +62,7 @@ class Cell:
         self._size_x = size_x
         self._size_y = size_y
         self._line_width = line_wdith
+        self.visited = visited
 
     def get_mid(self):
 
@@ -90,7 +93,6 @@ class Cell:
         col = "black"
         for num, line in enumerate([top_line,bot_line,left_line,right_line]):
 
-            
             if walls[num]:
                 col = "black"
             else:
@@ -125,7 +127,8 @@ class Maze:
         celll_size_x: int,
         cell_size_y: int,
         win: Window,
-        animation_speed = 70
+        animation_speed = 20,
+        seed = None
     ):
         self._x1 = x1
         self._y1 = y1
@@ -135,10 +138,13 @@ class Maze:
         self._cell_size_y = cell_size_y
         self._win = win
         self._aniamtion_speed = animation_speed
+        self._seed = seed
 
         self._cells = []
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(0,0)
+        self._reset_visited()
 
     def _create_cells(self):
         x_pos = self._x1
@@ -179,4 +185,88 @@ class Maze:
         self._cells[-1][-1].draw()
 
 
+    def _break_walls_r(self,i , j):
+        
+        to_visit = []
+
+        
+        for adj_nums in [
+                (i,j+1),
+                (i,j-1),
+                (i-1,j),
+                (i+1,j),
+        ]:
+            if (
+                adj_nums[0] >= 0 and 
+                adj_nums[0] < self._num_cols and
+                adj_nums[1] >= 0 and 
+                adj_nums[1] < self._num_rows
+                ):
+
+                to_visit.append(adj_nums)
+
+        #to_visit.append((i,j))
+        current_node = self._cells[i][j]
+        current_node.visited = True
+        while(True):
+        
+            if not to_visit:
+    
+                current_node.draw()
+                self._animate()
+                return     
+
+            random.seed(self._seed)
+            move_to = to_visit.pop(random.randint(0, len(to_visit)-1))
+            
+            
+            move_node = self._cells[move_to[0]][move_to[1]]
+            if not move_node.visited:
+                if move_to[1] > j:
+                    current_node.bot_wall = False
+                    move_node.top_wall = False
+      
+                elif move_to[1] < j:
+                    current_node.top_wall = False
+                    move_node.bot_wall = False
+
+                elif move_to[0] > i :
+                    current_node.right_wall = False
+                    move_node.left_wall = False
+                    
+
+                elif move_to[0] < i:
+                    current_node.left_wall = False
+                    move_node.right_wall = False
+
+                #current_node.draw()
+                #move_node.draw()
+                #current_node.draw_move(move_node)
+                
+                self._break_walls_r(move_to[0], move_to[1])
+        
+    def _reset_visited(self):
+        for col_num in range(self._num_cols):
+            for row_num in range(self._num_rows):
+                self._cells[col_num][row_num].visited = False
+        
+                
+                
+
+        
+
+
+
+
+            
+            
+        
+
+
+            
+            
+            
+
+
+        
 

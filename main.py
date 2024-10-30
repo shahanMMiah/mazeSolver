@@ -7,7 +7,7 @@ def main():
     height = 500
     window = Window(width, height, "test")
 
-    square_amount = 5
+    square_amount = 15
 
     cols = width / square_amount 
     rows = height / square_amount
