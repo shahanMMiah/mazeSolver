@@ -1,4 +1,4 @@
-""" Module for creat points, lines, cells and maze objects. """
+""" Module for creating points, lines, cells and maze objects"""
 
 from tkinter import Canvas
 import random
@@ -7,18 +7,18 @@ from window import Window
 
 
 class Point:
-    """Class for 2D positions."""
+    """Class for 2D positions"""
 
     def __init__(self, x: float, y: float):
         self._x = x
         self._y = y
 
     def get_x(self):
-        """Get x axis value."""
+        """Get x axis value"""
         return self._x
 
     def get_y(self):
-        """Get y axis value."""
+        """Get y axis value"""
         return self._y
 
 
@@ -286,7 +286,7 @@ class Maze:
         return to_visit
 
     def _break_walls_r(self, i: int, j: int):
-        """Break walls to make path to end cell
+        """Break walls to make path to end cell (DFS)
 
         Args:
             i (int): current cell pos row
@@ -345,7 +345,7 @@ class Maze:
         return self.solve_r(0, 0)
 
     def solve_r(self, i: int, j: int):
-        """recursivly move to next available cell to the end
+        """recursivly (DFS) move to next available cell till the end
 
         Args:
             i (int): current cell pos row

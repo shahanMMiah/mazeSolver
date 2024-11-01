@@ -1,4 +1,4 @@
-"""maze solver test module. """
+"""Maze solver test module"""
 
 import unittest
 from maze import Maze
@@ -6,7 +6,7 @@ from window import Window
 
 
 class Tests(unittest.TestCase):
-    """Test class for maze solver aspacts
+    """Test class for maze solver aspects
 
     Args:
         unittest (TestCase): deriving from unittest TestCase class
@@ -29,7 +29,7 @@ class Tests(unittest.TestCase):
         )
 
     def test_maze_resets_visited(self):
-        """Test if resets cell visited attribute"""
+        """Test if resets cell visited attributes"""
         window = Window(600, 500, "reset visited test")
         num_cols = 12
         num_rows = 10
